@@ -43,7 +43,6 @@ const {
           data-hero-video
           src={heroVideo}
           poster={heroImage}
-          transition:name={`hero-${slug}`}
           class="absolute inset-0 w-full h-full object-cover"
           autoplay
           muted
@@ -67,7 +66,6 @@ const {
         <img
           src={heroImage}
           alt={title}
-          transition:name={`hero-${slug}`}
           data-parallax="hero"
           class="absolute inset-0 w-full h-full object-cover"
           loading="eager"
@@ -207,7 +205,6 @@ const {
   }
 
   initHeroVideo();
-  document.addEventListener('astro:after-swap', initHeroVideo);
 </script>
 
 <style is:global>

@@ -196,9 +196,8 @@ export function initAnimations(): void {
   initHomeHeroZoom();
 }
 
-// astro:page-load fires on initial load and after each view transition
-document.addEventListener('astro:page-load', () => {
-  // Kill old ScrollTrigger instances from previous page
-  ScrollTrigger.getAll().forEach((t) => t.kill());
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => initAnimations());
+} else {
   initAnimations();
-});
+}
