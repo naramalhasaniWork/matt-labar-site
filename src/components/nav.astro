@@ -36,20 +36,20 @@ const links = [
     {/* Mobile hamburger */}
     <button
       id="menu-toggle"
-      class="md:hidden flex flex-col gap-1.5 p-2"
+      class="md:hidden flex flex-col gap-1.5 p-3 -mr-2 z-[60] relative"
       aria-label="Toggle menu"
       aria-expanded="false"
     >
-      <span class="block w-6 h-px bg-text-primary transition-transform duration-300 origin-center" id="bar-1"></span>
-      <span class="block w-6 h-px bg-text-primary transition-opacity duration-300" id="bar-2"></span>
-      <span class="block w-6 h-px bg-text-primary transition-transform duration-300 origin-center" id="bar-3"></span>
+      <span class="block w-6 h-px bg-text-primary transition-all duration-300 origin-center" id="bar-1"></span>
+      <span class="block w-6 h-px bg-text-primary transition-all duration-300" id="bar-2"></span>
+      <span class="block w-6 h-px bg-text-primary transition-all duration-300 origin-center" id="bar-3"></span>
     </button>
   </nav>
 
   {/* Mobile menu overlay */}
   <div
     id="mobile-menu"
-    class="fixed inset-0 bg-bg-primary/95 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500 md:hidden"
+    class="fixed inset-0 z-[55] bg-bg-primary/95 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500 md:hidden"
   >
     <ul class="flex flex-col items-center gap-8">
       {links.map(({ href, label }) => (
@@ -67,51 +67,56 @@ const links = [
 </header>
 
 <script>
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-  const bar1 = document.getElementById('bar-1');
-  const bar2 = document.getElementById('bar-2');
-  const bar3 = document.getElementById('bar-3');
-  let isOpen = false;
+  function initNav() {
+    const toggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const bar1 = document.getElementById('bar-1');
+    const bar2 = document.getElementById('bar-2');
+    const bar3 = document.getElementById('bar-3');
+    let isOpen = false;
 
-  toggle?.addEventListener('click', () => {
-    isOpen = !isOpen;
-    toggle.setAttribute('aria-expanded', String(isOpen));
-
-    if (isOpen) {
+    function openMenu() {
+      isOpen = true;
+      toggle?.setAttribute('aria-expanded', 'true');
       menu?.classList.remove('opacity-0', 'pointer-events-none');
       menu?.classList.add('opacity-100', 'pointer-events-auto');
       bar1?.classList.add('rotate-45', 'translate-y-[4px]');
       bar2?.classList.add('opacity-0');
       bar3?.classList.add('-rotate-45', '-translate-y-[4px]');
-    } else {
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      isOpen = false;
+      toggle?.setAttribute('aria-expanded', 'false');
       menu?.classList.add('opacity-0', 'pointer-events-none');
       menu?.classList.remove('opacity-100', 'pointer-events-auto');
       bar1?.classList.remove('rotate-45', 'translate-y-[4px]');
       bar2?.classList.remove('opacity-0');
       bar3?.classList.remove('-rotate-45', '-translate-y-[4px]');
+      document.body.style.overflow = '';
     }
-  });
 
-  // Close menu on link click
-  menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      isOpen = false;
-      menu.classList.add('opacity-0', 'pointer-events-none');
-      menu.classList.remove('opacity-100', 'pointer-events-auto');
-      bar1?.classList.remove('rotate-45', 'translate-y-[4px]');
-      bar2?.classList.remove('opacity-0');
-      bar3?.classList.remove('-rotate-45', '-translate-y-[4px]');
+    toggle?.addEventListener('click', () => {
+      isOpen ? closeMenu() : openMenu();
     });
-  });
 
-  // Solid nav background on scroll
-  const nav = document.getElementById('site-nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      nav?.classList.add('bg-bg-primary/90', 'backdrop-blur-md');
-    } else {
-      nav?.classList.remove('bg-bg-primary/90', 'backdrop-blur-md');
+    menu?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    const nav = document.getElementById('site-nav');
+    function onScroll() {
+      if (window.scrollY > 50) {
+        nav?.classList.add('bg-bg-primary/90', 'backdrop-blur-md');
+      } else {
+        nav?.classList.remove('bg-bg-primary/90', 'backdrop-blur-md');
+      }
     }
-  });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  initNav();
+  document.addEventListener('astro:after-swap', initNav);
 </script>
