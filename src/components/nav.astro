@@ -107,11 +107,7 @@ const links = [
 
     const nav = document.getElementById('site-nav');
     function onScroll() {
-      if (window.scrollY > 50) {
-        nav?.classList.add('bg-bg-primary/90', 'backdrop-blur-md');
-      } else {
-        nav?.classList.remove('bg-bg-primary/90', 'backdrop-blur-md');
-      }
+      // Keep nav fully transparent — let the photos breathe
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
