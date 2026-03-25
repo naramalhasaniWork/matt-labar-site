@@ -111,4 +111,5 @@ const { src, poster, class: className } = Astro.props;
   }
 
   initAutoplayVideos();
+  document.addEventListener('astro:after-swap', initAutoplayVideos);
 </script>

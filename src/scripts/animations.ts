@@ -196,8 +196,7 @@ export function initAnimations(): void {
   initHomeHeroZoom();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => initAnimations());
-} else {
+document.addEventListener('astro:page-load', () => {
+  ScrollTrigger.getAll().forEach((t) => t.kill());
   initAnimations();
-}
+});
